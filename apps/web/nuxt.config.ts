@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
 
+  // Cloudflare Pages deployment
+  nitro: {
+    preset: "cloudflare-pages",
+  },
+
   runtimeConfig: {
     public: {
       apiBase:
