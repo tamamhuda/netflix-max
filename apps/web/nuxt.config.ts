@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   // Cloudflare Pages deployment - static SPA mode
   ssr: false,
   nitro: {
-    preset: "cloudflare-pages",
+    preset: "cloudflare-pages-static",
   },
 
   runtimeConfig: {
