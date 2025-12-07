@@ -1,5 +1,4 @@
 name = "netflix-max"
 compatibility_date = "2024-11-01"
 pages_build_output_dir = "dist"
-node = true
-
+compatibility_flags = ["nodejs_compat"]
