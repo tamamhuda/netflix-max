@@ -1,24 +1,21 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { DRIZZLE } from "../../database/database.module";
 import { TmdbService } from "../tmdb/tmdb.service";
-import Redis from "ioredis";
+import { RedisService } from "../redis/redis.service";
 
 @Injectable()
 export class ContentService {
-  private redis: Redis;
-
   constructor(
     @Inject(DRIZZLE) private readonly db: any,
-    private readonly tmdbService: TmdbService
-  ) {
-    this.redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
-  }
+    private readonly tmdbService: TmdbService,
+    private readonly redisService: RedisService
+  ) {}
 
   async getHomeContent(hasMaxAccess: boolean) {
     // Always use the same cache key since we return all content now
     // The frontend handles the locked state
     const cacheKey = "home:full";
-    const cached = await this.redis.get(cacheKey);
+    const cached = await this.redisService.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached);
@@ -41,7 +38,7 @@ export class ContentService {
       wb,
     };
 
-    await this.redis.setex(cacheKey, 3600, JSON.stringify(homeContent));
+    await this.redisService.setex(cacheKey, 3600, JSON.stringify(homeContent));
     return homeContent;
   }
 
@@ -51,7 +48,7 @@ export class ContentService {
 
   async getDetails(id: number, mediaType: "movie" | "tv") {
     const cacheKey = `details:${mediaType}:${id}`;
-    const cached = await this.redis.get(cacheKey);
+    const cached = await this.redisService.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached);
@@ -62,13 +59,13 @@ export class ContentService {
         ? await this.tmdbService.getMovieDetails(id)
         : await this.tmdbService.getTVDetails(id);
 
-    await this.redis.setex(cacheKey, 3600, JSON.stringify(details));
+    await this.redisService.setex(cacheKey, 3600, JSON.stringify(details));
     return details;
   }
 
   async getPublicTrending() {
     const cacheKey = "public:trending";
-    const cached = await this.redis.get(cacheKey);
+    const cached = await this.redisService.get(cacheKey);
 
     if (cached) {
       return JSON.parse(cached);
@@ -84,7 +81,11 @@ export class ContentService {
       max: hbo.slice(0, 10),
     };
 
-    await this.redis.setex(cacheKey, 3600, JSON.stringify(publicContent));
+    await this.redisService.setex(
+      cacheKey,
+      3600,
+      JSON.stringify(publicContent)
+    );
     return publicContent;
   }
 }

@@ -8,17 +8,21 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { DatabaseModule } from "./database/database.module";
 import { ContentModule } from "./modules/content/content.module";
 import { TmdbModule } from "./modules/tmdb/tmdb.module";
+import { RedisModule } from "./modules/redis/redis.module";
 
 @Module({
   imports: [
-    // Configuration
+    // Configuration - load .env.dev first if exists, then .env as fallback
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: "../../.env",
+      envFilePath: ["../../.env.dev", "../../.env"],
     }),
 
     // Database
     DatabaseModule,
+
+    // Redis
+    RedisModule,
 
     // Rate limiting
     ThrottlerModule.forRoot([

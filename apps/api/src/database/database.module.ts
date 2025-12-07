@@ -1,10 +1,10 @@
-import { Module, Global } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import * as schema from './schema';
+import { Module, Global } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import * as schema from "./schema";
 
-export const DRIZZLE = 'DRIZZLE';
+export const DRIZZLE = "DRIZZLE";
 
 @Global()
 @Module({
@@ -13,10 +13,22 @@ export const DRIZZLE = 'DRIZZLE';
       provide: DRIZZLE,
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const connectionString = configService.get<string>('DATABASE_URL');
+        const connectionString = configService.get<string>("DATABASE_URL");
+
+        // Check if using serverless (Neon) - requires SSL
+        const isServerless =
+          connectionString?.includes("neon.tech") ||
+          connectionString?.includes("sslmode=require");
+
         const pool = new Pool({
           connectionString,
+          ssl: isServerless ? { rejectUnauthorized: false } : undefined,
         });
+
+        console.log(
+          `🐘 PostgreSQL: Connected ${isServerless ? "(serverless/SSL)" : "(local)"}`
+        );
+
         return drizzle(pool, { schema });
       },
     },

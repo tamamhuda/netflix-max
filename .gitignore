@@ -5,7 +5,7 @@ dist
 .nuxt
 .output
 .env
-.env.local
+.env.*
 .DS_Store
 coverage
 task
