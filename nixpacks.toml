@@ -1,8 +1,9 @@
+# Skip postinstall scripts that require native bindings
 [phases.install]
-cmds = ["pnpm install"]
+cmds = ["pnpm install --ignore-scripts"]
 
 [phases.build]
-cmds = ["pnpm run build"]
+cmds = ["pnpm --filter @netflix-max/api build"]
 
 [start]
 cmd = "node apps/api/dist/main.js"
