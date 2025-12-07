@@ -1,0 +1,12 @@
+node_modules
+dist
+.turbo
+.next
+.nuxt
+.output
+.env
+.env.local
+.DS_Store
+coverage
+task
+task/*
