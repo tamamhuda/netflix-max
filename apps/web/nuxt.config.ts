@@ -4,11 +4,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
 
-  // Cloudflare Pages deployment
+  // Cloudflare Pages deployment - static SPA mode
+  ssr: false,
   nitro: {
-    preset: "cloudflare-pages",
-    compatibilityDate: "2024-09-19",
-    node: true,
+    preset: "cloudflare-pages-static",
   },
 
   runtimeConfig: {
