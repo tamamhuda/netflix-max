@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "build:api": "pnpm --filter @netflix-max/api build",
+    "start": "node apps/api/dist/main.js",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
