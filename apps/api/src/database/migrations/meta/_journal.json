@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1765028076831,
+      "tag": "0000_vengeful_devos",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1765028356757,
+      "tag": "0001_fixed_terror",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1765028419550,
+      "tag": "0002_known_nekra",
+      "breakpoints": true
+    }
+  ]
+}
