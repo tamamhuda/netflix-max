@@ -43,7 +43,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async get(key: string): Promise<string | null> {
     if (this.useUpstash && this.upstashClient) {
-      return this.upstashClient.get<string>(key);
+      // Upstash auto-parses JSON, so we get the raw value and stringify if needed
+      const result = await this.upstashClient.get(key);
+      if (result === null) return null;
+      // If it's already a string, return it; otherwise stringify
+      return typeof result === "string" ? result : JSON.stringify(result);
     }
     if (this.ioredisClient) {
       return this.ioredisClient.get(key);
